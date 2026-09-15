@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Aulas e Diárias</title>
+  <title>Controle de Ganhos</title>
   <style>
     :root {
       --primary-color: #0284c7;
@@ -97,6 +97,22 @@
       font-size: 12px;
       color: #64748b;
     }
+
+    .btn-reset {
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-reset:active {
+      background-color: #dc2626;
+    }
   </style>
 </head>
 <body>
@@ -109,12 +125,12 @@
     
     <div class="input-group">
       <label for="diarias">Diárias <span class="price-tag">(R$ 80,00)</span></label>
-      <input type="number" id="diarias" min="0" value="0" oninput="calcularTotal()">
+      <input type="number" id="diarias" min="0" value="0" oninput="salvarECalcular()">
     </div>
 
     <div class="input-group">
       <label for="assistenciaGeral">Assistência (1h) <span class="price-tag">(R$ 50,00)</span></label>
-      <input type="number" id="assistenciaGeral" min="0" value="0" oninput="calcularTotal()">
+      <input type="number" id="assistenciaGeral" min="0" value="0" oninput="salvarECalcular()">
     </div>
 
     <!-- SEÇÃO WING -->
@@ -122,12 +138,12 @@
 
     <div class="input-group">
       <label for="aulasWing">Aula Wing (2h) <span class="price-tag">(R$ 225,00)</span></label>
-      <input type="number" id="aulasWing" min="0" value="0" oninput="calcularTotal()">
+      <input type="number" id="aulasWing" min="0" value="0" oninput="salvarECalcular()">
     </div>
 
     <div class="input-group">
       <label for="assistenciaWing">Assistência Wing (2h) <span class="price-tag">(R$ 195,00)</span></label>
-      <input type="number" id="assistenciaWing" min="0" value="0" oninput="calcularTotal()">
+      <input type="number" id="assistenciaWing" min="0" value="0" oninput="salvarECalcular()">
     </div>
 
     <!-- RESUMO DE VALORES -->
@@ -145,34 +161,62 @@
         <span id="totalFinal">R$ 0,00</span>
       </div>
     </div>
+
+    <button class="btn-reset" onclick="zerarTudo()">Zerar Valores</button>
   </div>
 
   <script>
+    // Carregar dados salvos assim que a página abre
+    window.onload = function() {
+      if (localStorage.getItem('diarias')) document.getElementById('diarias').value = localStorage.getItem('diarias');
+      if (localStorage.getItem('assistenciaGeral')) document.getElementById('assistenciaGeral').value = localStorage.getItem('assistenciaGeral');
+      if (localStorage.getItem('aulasWing')) document.getElementById('aulasWing').value = localStorage.getItem('aulasWing');
+      if (localStorage.getItem('assistenciaWing')) document.getElementById('assistenciaWing').value = localStorage.getItem('assistenciaWing');
+      
+      calcularTotal();
+    };
+
+    function salvarECalcular() {
+      // Salva os valores no navegador
+      localStorage.setItem('diarias', document.getElementById('diarias').value);
+      localStorage.setItem('assistenciaGeral', document.getElementById('assistenciaGeral').value);
+      localStorage.setItem('aulasWing', document.getElementById('aulasWing').value);
+      localStorage.setItem('assistenciaWing', document.getElementById('assistenciaWing').value);
+
+      calcularTotal();
+    }
+
     function calcularTotal() {
-      // Valores dos serviços
       const VALOR_DIARIA = 80;
       const VALOR_ASSISTENCIA_GERAL = 50;
       const VALOR_AULA_WING = 225;
       const VALOR_ASSISTENCIA_WING = 195;
 
-      // Quantidades informadas
       const qtdDiarias = Number(document.getElementById('diarias').value) || 0;
       const qtdAssistGeral = Number(document.getElementById('assistenciaGeral').value) || 0;
       const qtdAulasWing = Number(document.getElementById('aulasWing').value) || 0;
       const qtdAssistWing = Number(document.getElementById('assistenciaWing').value) || 0;
 
-      // Cálculos por categoria
       const subtotalGeral = (qtdDiarias * VALOR_DIARIA) + (qtdAssistGeral * VALOR_ASSISTENCIA_GERAL);
       const subtotalWing = (qtdAulasWing * VALOR_AULA_WING) + (qtdAssistWing * VALOR_ASSISTENCIA_WING);
       const totalFinal = subtotalGeral + subtotalWing;
 
-      // Atualização dos valores na tela
       document.getElementById('subtotalGeral').innerText = subtotalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       document.getElementById('subtotalWing').innerText = subtotalWing.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       document.getElementById('totalFinal').innerText = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function zerarTudo() {
+      if (confirm("Deseja zerar todos os campos?")) {
+        localStorage.clear();
+        document.getElementById('diarias').value = 0;
+        document.getElementById('assistenciaGeral').value = 0;
+        document.getElementById('aulasWing').value = 0;
+        document.getElementById('assistenciaWing').value = 0;
+        calcularTotal();
+      }
     }
   </script>
 
 </body>
 </html>
-
