@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle de Ganhos</title>
   
-  <!-- Configurações de PWA (Aplicativo) -->
+  <!-- Configurações de PWA (Aplicativo e Ícone Wing Foil) -->
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ganhos">
-  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2xlIGRlIEdhbmhvcyIsCiAgInNob3J0X25hbWUiIjogIkdhbmhvcyIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmYWZjIiwKICAidGhlbWVfY29sb3IiOiAiIzAyODRjNyIKfQ==">
+
+  <!-- Ícone de Wing Foil para navegadores e tela inicial -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2xlIGRlIEdhbmhvcyIsCiAgInNob3J0X25hbWUiIjogIkdhbmhvcyIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmYWZjIiwKICAidGhlbWVfY29sb3IiOiAiIzAyODRjNyIsCiAgImljb25zIjogW3sKICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHJlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMDI4NGM3Jy8+PHBvbHlnb24gcG9pbnRzPSc1MCwyMCAyMCw0OCA1MCw1MicgZmlsbD0nd2hpdGUnLz48cG9seWdvbiBwb2ludHM9JzUwLDIwIDgwLDQ4IDUwLDUyJyBmaWxsPSclMjNiYWU2ZmQnLz48bGluZSB4MT0nNTAnIHkxPScyMCcgeDI9JzUwJyB5Mj0nNTInIHN0cm9rZT0nJTIzMGU3NDkwJyBzdHJva2Utd2lkdGg9JzInLz48cmVjdCB4PSczMicgeT0nNjQnIHdpZHRoPSczNicgaGVpZ2h0PSc0JyByeD0nMicgZmlsbD0nd2hpdGUnLz48bGluZSB4MT0nNTAnIHkxPSc2OCcgeDI9JzUwJyB5Mj0nODInIHN0cm9rZT0nd2hpdGUnIHN0cm9rZS13aWR0aD0nRicvPjxwb2x5Z29uIHBvaW50cz0nMzYsODIgNTAsODAgNjQsODIgNTAsODQnIGZpbGw9JyUyMzM4YmRmOCcvPjwvc3ZnPiIsCiAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICB9XQp9">
 
   <style>
     :root {
