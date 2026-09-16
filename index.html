@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle de Ganhos</title>
   
-  <!-- Configurações de PWA (Aplicativo e Ícone Wing Foil) -->
+  <!-- Links do Aplicativo e Ícone -->
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Ganhos">
-
-  <!-- Ícone de Wing Foil para navegadores e tela inicial -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
-  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2xlIGRlIEdhbmhvcyIsCiAgInNob3J0X25hbWUiIjogIkdhbmhvcyIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmYWZjIiwKICAidGhlbWVfY29sb3IiOiAiIzAyODRjNyIsCiAgImljb25zIjogW3sKICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHJlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMDI4NGM3Jy8+PHBvbHlnb24gcG9pbnRzPSc1MCwyMCAyMCw0OCA1MCw1MicgZmlsbD0nd2hpdGUnLz48cG9seWdvbiBwb2ludHM9JzUwLDIwIDgwLDQ4IDUwLDUyJyBmaWxsPSclMjNiYWU2ZmQnLz48bGluZSB4MT0nNTAnIHkxPScyMCcgeDI9JzUwJyB5Mj0nNTInIHN0cm9rZT0nJTIzMGU3NDkwJyBzdHJva2Utd2lkdGg9JzInLz48cmVjdCB4PSczMicgeT0nNjQnIHdpZHRoPSczNicgaGVpZ2h0PSc0JyByeD0nMicgZmlsbD0nd2hpdGUnLz48bGluZSB4MT0nNTAnIHkxPSc2OCcgeDI9JzUwJyB5Mj0nODInIHN0cm9rZT0nd2hpdGUnIHN0cm9rZS13aWR0aD0nRicvPjxwb2x5Z29uIHBvaW50cz0nMzYsODIgNTAsODAgNjQsODIgNTAsODQnIGZpbGw9JyUyMzM4YmRmOCcvPjwvc3ZnPiIsCiAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICB9XQp9">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
 
   <style>
     :root {
@@ -45,7 +42,6 @@
       max-width: 500px;
     }
 
-    /* CARD DE TOTAL */
     .total-card {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
@@ -69,7 +65,6 @@
       font-weight: 800;
     }
 
-    /* SEÇÃO HISTÓRICO */
     .history-header {
       display: flex;
       justify-content: space-between;
@@ -137,7 +132,6 @@
       font-size: 14px;
     }
 
-    /* BOTÃO FLUTUANTE DE ADICIONAR (+) */
     .btn-add-float {
       position: fixed;
       bottom: 24px;
@@ -154,14 +148,8 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.2s;
     }
 
-    .btn-add-float:active {
-      transform: scale(0.95);
-    }
-
-    /* MODAL DO FORMULÁRIO */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -182,19 +170,6 @@
       padding: 24px;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-      animation: slideUp 0.3s ease-out;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .modal-content h3 {
-      margin-bottom: 16px;
-      font-size: 18px;
-      color: #0f172a;
     }
 
     .form-group {
@@ -215,11 +190,6 @@
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       font-size: 15px;
-      outline: none;
-    }
-
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--primary-color);
     }
 
     .modal-buttons {
@@ -236,8 +206,6 @@
       padding: 14px;
       border-radius: 8px;
       font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
     }
 
     .btn-cancel {
@@ -248,8 +216,6 @@
       padding: 14px;
       border-radius: 8px;
       font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
     }
 
     .hidden {
@@ -260,42 +226,34 @@
 <body>
 
   <div class="app-container">
-    <!-- VALOR TOTAL -->
     <div class="total-card">
       <h2>Total de Ganhos</h2>
       <div class="amount" id="totalAmount">R$ 0,00</div>
     </div>
 
-    <!-- HISTÓRICO -->
     <div class="history-header">
       <h3>Histórico de Registros</h3>
     </div>
 
-    <div id="historyList" class="history-list">
-      <!-- Registros vão aparecer aqui -->
-    </div>
+    <div id="historyList" class="history-list"></div>
     
     <div id="emptyState" class="empty-state">
       Nenhum registro adicionado ainda.<br>Clique no botão <b>+</b> abaixo para adicionar.
     </div>
   </div>
 
-  <!-- BOTÃO FLUTUANTE DE ADICIONAR -->
   <button class="btn-add-float" onclick="abrirModal()">+</button>
 
-  <!-- MODAL DE CADASTRO -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
       <h3>Novo Registro</h3>
       
       <form id="ganhosForm" onsubmit="salvarRegistro(event)">
-        <!-- DATA -->
         <div class="form-group">
           <label for="data">Data</label>
           <input type="date" id="data" required>
         </div>
 
-        <!-- TIPO DE SERVIÇO -->
         <div class="form-group">
           <label for="tipoServico">Tipo de Serviço</label>
           <select id="tipoServico" onchange="tratarMudancaTipo()" required>
@@ -307,7 +265,6 @@
           </select>
         </div>
 
-        <!-- SUB-OPÇÃO DA DIÁRIA (Só aparece para diária) -->
         <div class="form-group hidden" id="groupSubDiaria">
           <label for="subDiaria">Tipo de Diária</label>
           <select id="subDiaria">
@@ -316,7 +273,6 @@
           </select>
         </div>
 
-        <!-- HORAS (Só aparece para aulas/assistências) -->
         <div class="form-group hidden" id="groupHoras">
           <label for="quantidadeHoras">Quantidade de Horas</label>
           <input type="number" id="quantidadeHoras" min="0.5" step="0.5" placeholder="Ex: 1 ou 2">
@@ -331,6 +287,11 @@
   </div>
 
   <script>
+    // Registrar o Service Worker para liberar a opção "Instalar"
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+
     let registros = JSON.parse(localStorage.getItem('registros_ganhos')) || [];
 
     window.onload = function() {
