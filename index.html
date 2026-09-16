@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle de Ganhos</title>
   
-  <!-- Links do Aplicativo e Ícone -->
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/icon-192.png">
-  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230284c7'/><polygon points='50,20 20,48 50,52' fill='white'/><polygon points='50,20 80,48 50,52' fill='%23bae6fd'/><line x1='50' y1='20' x2='50' y2='52' stroke='%230e7490' stroke-width='2'/><rect x='32' y='64' width='36' height='4' rx='2' fill='white'/><line x1='50' y1='68' x2='50' y2='82' stroke='white' stroke-width='2'/><polygon points='36,82 50,80 64,82 50,84' fill='%2338bdf8'/></svg>">
 
   <style>
     :root {
@@ -287,7 +286,6 @@
   </div>
 
   <script>
-    // Registrar o Service Worker para liberar a opção "Instalar"
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
     }
