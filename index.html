@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle de Ganhos</title>
+  
+  <!-- Configurações de PWA (Aplicativo) -->
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ganhos">
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2xlIGRlIEdhbmhvcyIsCiAgInNob3J0X25hbWUiIjogIkdhbmhvcyIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmYWZjIiwKICAidGhlbWVfY29sb3IiOiAiIzAyODRjNyIKfQ==">
+
   <style>
     :root {
       --primary-color: #0284c7;
@@ -322,7 +330,6 @@
     let registros = JSON.parse(localStorage.getItem('registros_ganhos')) || [];
 
     window.onload = function() {
-      // Definir a data de hoje como padrão no input
       document.getElementById('data').valueAsDate = new Date();
       renderizarHistorico();
     };
@@ -367,7 +374,6 @@
       let titulo = '';
       let valor = 0;
 
-      // Formatar a data para exibição (dd/mm/aaaa)
       const partesData = data.split('-');
       const dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
 
@@ -380,13 +386,13 @@
         
         if (tipoServico === 'aula_wing') {
           titulo = `Aula de Wing (${horas}h)`;
-          valor = horas * 112.5; // 225 por 2 horas = 112.5 por hora
+          valor = horas * 112.5;
         } else if (tipoServico === 'assist_wing') {
           titulo = `Assistência de Wing (${horas}h)`;
-          valor = horas * 97.5; // 195 por 2 horas = 97.5 por hora
+          valor = horas * 97.5;
         } else if (tipoServico === 'assist_kite') {
           titulo = `Assistência de Kite (${horas}h)`;
-          valor = horas * 50; // 50 por 1 hora
+          valor = horas * 50;
         }
       }
 
@@ -397,7 +403,7 @@
         valor: valor
       };
 
-      registros.unshift(novoRegistro); // Adiciona no início da lista
+      registros.unshift(novoRegistro);
       localStorage.setItem('registros_ganhos', JSON.stringify(registros));
 
       renderizarHistorico();
