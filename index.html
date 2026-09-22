@@ -169,6 +169,8 @@
       padding: 24px;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .form-group {
@@ -257,13 +259,49 @@
           <label for="tipoServico">Tipo de Serviço</label>
           <select id="tipoServico" onchange="tratarMudancaTipo()" required>
             <option value="" disabled selected hidden>Selecione...</option>
-            <option value="diaria">Diária</option>
+            <option value="aula_kite">Aula de Kite</option>
+            <option value="assist_kite">Assistência de Kite</option>
             <option value="aula_wing">Aula de Wing</option>
             <option value="assist_wing">Assistência de Wing</option>
-            <option value="assist_kite">Assistência de Kite</option>
+            <option value="diaria">Diária</option>
           </select>
         </div>
 
+        <!-- CAMPOS ESPECÍFICOS PARA AULA DE KITE -->
+        <div id="groupAulaKite" class="hidden">
+          <div class="form-group">
+            <label for="nomeAluno">Nome do Aluno</label>
+            <input type="text" id="nomeAluno" placeholder="Ex: João Silva">
+          </div>
+
+          <div class="form-group">
+            <label for="modalidadeKite">Modalidade</label>
+            <select id="modalidadeKite">
+              <option value="particular">Particular</option>
+              <option value="coletiva">Coletiva</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="localKite">Local</label>
+            <select id="localKite">
+              <option value="ponta">Ponta</option>
+              <option value="patos">Patos (+ R$ 75,00)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="duracaoKite">Duração</label>
+            <select id="duracaoKite">
+              <option value="0.5">30m</option>
+              <option value="1">1h</option>
+              <option value="1.5">1h:30</option>
+              <option value="2" selected>2h</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SUB-OPÇÃO DA DIÁRIA -->
         <div class="form-group hidden" id="groupSubDiaria">
           <label for="subDiaria">Tipo de Diária</label>
           <select id="subDiaria">
@@ -272,7 +310,8 @@
           </select>
         </div>
 
-        <div class="form-group hidden" id="groupHoras">
+        <!-- HORAS (PARA OUTRAS AULAS E ASSISTÊNCIAS) -->
+        <div class="form-group hidden" id="groupHorasGeral">
           <label for="quantidadeHoras">Quantidade de Horas</label>
           <input type="number" id="quantidadeHoras" min="0.5" step="0.5" placeholder="Ex: 1 ou 2">
         </div>
@@ -305,26 +344,27 @@
       document.getElementById('modalOverlay').style.display = 'none';
       document.getElementById('ganhosForm').reset();
       document.getElementById('data').valueAsDate = new Date();
+      document.getElementById('groupAulaKite').classList.add('hidden');
       document.getElementById('groupSubDiaria').classList.add('hidden');
-      document.getElementById('groupHoras').classList.add('hidden');
+      document.getElementById('groupHorasGeral').classList.add('hidden');
     }
 
     function tratarMudancaTipo() {
       const tipo = document.getElementById('tipoServico').value;
+      const groupAulaKite = document.getElementById('groupAulaKite');
       const groupSubDiaria = document.getElementById('groupSubDiaria');
-      const groupHoras = document.getElementById('groupHoras');
+      const groupHorasGeral = document.getElementById('groupHorasGeral');
 
-      if (tipo === 'diaria') {
+      groupAulaKite.classList.add('hidden');
+      groupSubDiaria.classList.add('hidden');
+      groupHorasGeral.classList.add('hidden');
+
+      if (tipo === 'aula_kite') {
+        groupAulaKite.classList.remove('hidden');
+      } else if (tipo === 'diaria') {
         groupSubDiaria.classList.remove('hidden');
-        groupHoras.classList.add('hidden');
-        document.getElementById('quantidadeHoras').removeAttribute('required');
       } else if (tipo !== '') {
-        groupSubDiaria.classList.add('hidden');
-        groupHoras.classList.remove('hidden');
-        document.getElementById('quantidadeHoras').setAttribute('required', 'true');
-      } else {
-        groupSubDiaria.classList.add('hidden');
-        groupHoras.classList.add('hidden');
+        groupHorasGeral.classList.remove('hidden');
       }
     }
 
@@ -340,10 +380,33 @@
       const partesData = data.split('-');
       const dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
 
-      if (tipoServico === 'diaria') {
+      if (tipoServico === 'aula_kite') {
+        const aluno = document.getElementById('nomeAluno').value.trim() || 'Aluno';
+        const modalidade = document.getElementById('modalidadeKite').value;
+        const local = document.getElementById('localKite').value;
+        const duracao = parseFloat(document.getElementById('duracaoKite').value);
+
+        // Valor por hora (2h Particular = 162,50 -> 81,25/h | 2h Coletiva = 137,50 -> 68,75/h)
+        const valorHora = (modalidade === 'particular') ? 81.25 : 68.75;
+        let valorBase = valorHora * duracao;
+        
+        if (local === 'patos') {
+          valorBase += 75; // Adicional de Patos
+        }
+
+        valor = valorBase;
+        
+        const rotuloDuracao = duracao === 0.5 ? '30m' : duracao === 1.5 ? '1h30' : `${duracao}h`;
+        const rotuloModalidade = modalidade === 'particular' ? 'Part.' : 'Colet.';
+        const rotuloLocal = local === 'ponta' ? 'Ponta' : 'Patos';
+
+        titulo = `Aula Kite (${aluno}) - ${rotuloModalidade} / ${rotuloLocal} / ${rotuloDuracao}`;
+
+      } else if (tipoServico === 'diaria') {
         const subDiaria = document.getElementById('subDiaria').value;
         titulo = `Diária (${subDiaria})`;
         valor = 80;
+
       } else {
         const horas = parseFloat(document.getElementById('quantidadeHoras').value) || 0;
         
