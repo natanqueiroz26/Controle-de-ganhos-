@@ -270,16 +270,21 @@
         <!-- CAMPOS ESPECÍFICOS PARA AULA DE KITE -->
         <div id="groupAulaKite" class="hidden">
           <div class="form-group">
-            <label for="nomeAluno">Nome do Aluno</label>
-            <input type="text" id="nomeAluno" placeholder="Ex: João Silva">
+            <label for="nomeAluno">Nome do(s) Aluno(s)</label>
+            <input type="text" id="nomeAluno" placeholder="Ex: João / Maria">
           </div>
 
           <div class="form-group">
             <label for="modalidadeKite">Modalidade</label>
-            <select id="modalidadeKite">
+            <select id="modalidadeKite" onchange="tratarMudancaModalidade()">
               <option value="particular">Particular</option>
-              <option value="coletiva">Coletiva</option>
+              <option value="coletiva">Coletiva (R$ 137,50 por pessoa)</option>
             </select>
+          </div>
+
+          <div class="form-group hidden" id="groupQtdAlunos">
+            <label for="qtdAlunos">Quantidade de Alunos</label>
+            <input type="number" id="qtdAlunos" min="1" value="2">
           </div>
 
           <div class="form-group">
@@ -347,6 +352,7 @@
       document.getElementById('groupAulaKite').classList.add('hidden');
       document.getElementById('groupSubDiaria').classList.add('hidden');
       document.getElementById('groupHorasGeral').classList.add('hidden');
+      document.getElementById('groupQtdAlunos').classList.add('hidden');
     }
 
     function tratarMudancaTipo() {
@@ -361,10 +367,22 @@
 
       if (tipo === 'aula_kite') {
         groupAulaKite.classList.remove('hidden');
+        tratarMudancaModalidade();
       } else if (tipo === 'diaria') {
         groupSubDiaria.classList.remove('hidden');
       } else if (tipo !== '') {
         groupHorasGeral.classList.remove('hidden');
+      }
+    }
+
+    function tratarMudancaModalidade() {
+      const modalidade = document.getElementById('modalidadeKite').value;
+      const groupQtdAlunos = document.getElementById('groupQtdAlunos');
+
+      if (modalidade === 'coletiva') {
+        groupQtdAlunos.classList.remove('hidden');
+      } else {
+        groupQtdAlunos.classList.add('hidden');
       }
     }
 
@@ -386,18 +404,23 @@
         const local = document.getElementById('localKite').value;
         const duracao = parseFloat(document.getElementById('duracaoKite').value);
 
-        // Valor por hora (2h Particular = 162,50 -> 81,25/h | 2h Coletiva = 137,50 -> 68,75/h)
-        const valorHora = (modalidade === 'particular') ? 81.25 : 68.75;
-        let valorBase = valorHora * duracao;
+        let numPessoas = 1;
+        if (modalidade === 'coletiva') {
+          numPessoas = parseInt(document.getElementById('qtdAlunos').value) || 1;
+        }
+
+        // Valor por hora por pessoa (2h Particular = 162,50 -> 81,25/h | 2h Coletiva = 137,50 por pessoa -> 68,75/h/pessoa)
+        const valorHoraPessoa = (modalidade === 'particular') ? 81.25 : 68.75;
+        let valorBase = (valorHoraPessoa * duracao) * numPessoas;
         
         if (local === 'patos') {
-          valorBase += 75; // Adicional de Patos
+          valorBase += 75; // Adicional Patos
         }
 
         valor = valorBase;
         
         const rotuloDuracao = duracao === 0.5 ? '30m' : duracao === 1.5 ? '1h30' : `${duracao}h`;
-        const rotuloModalidade = modalidade === 'particular' ? 'Part.' : 'Colet.';
+        const rotuloModalidade = modalidade === 'particular' ? 'Part.' : `Colet. (${numPessoas}p)`;
         const rotuloLocal = local === 'ponta' ? 'Ponta' : 'Patos';
 
         titulo = `Aula Kite (${aluno}) - ${rotuloModalidade} / ${rotuloLocal} / ${rotuloDuracao}`;
