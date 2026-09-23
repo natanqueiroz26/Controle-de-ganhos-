@@ -215,10 +215,10 @@
     }
 
     .menu-group-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f172a;
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 8px;
       cursor: pointer;
       background: #f1f5f9;
@@ -241,15 +241,14 @@
     }
 
     .menu-item {
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: #475569;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
       transition: background 0.2s;
     }
 
@@ -343,14 +342,14 @@
 
     <div>
       <div class="menu-item active" onclick="filtrar('todos', 'Todos os Registros')">
-        📊 Todos os Registros
+        Todos os Registros
       </div>
     </div>
 
     <!-- ICARAÍ WING ACADEMY -->
     <div>
-      <div class="menu-group-title" onclick="filtrar('escola_wing', 'Icaraí Wing Academy (Tudo)')">
-        🪂 Icaraí Wing Academy <span>➔</span>
+      <div class="menu-group-title" onclick="filtrar('escola_wing', 'Icaraí Wing Academy')">
+        Icaraí Wing Academy
       </div>
       <div class="menu-subitems">
         <div class="menu-item" onclick="filtrar('aula_wing', 'Wing Academy - Aulas')">
@@ -364,8 +363,8 @@
 
     <!-- CABANA DO KITE -->
     <div>
-      <div class="menu-group-title" onclick="filtrar('escola_kite', 'Cabana do Kite (Tudo)')">
-        🪁 Cabana do Kite <span>➔</span>
+      <div class="menu-group-title" onclick="filtrar('escola_kite', 'Cabana do Kite')">
+        Cabana do Kite
       </div>
       <div class="menu-subitems">
         <div class="menu-item" onclick="filtrar('aula_kite', 'Cabana do Kite - Aulas')">
@@ -420,11 +419,11 @@
           <label for="tipoServico">Tipo de Serviço</label>
           <select id="tipoServico" onchange="tratarMudancaTipo()" required>
             <option value="" disabled selected hidden>Selecione...</option>
-            <option value="aula_kite">Aula de Kite (Cabana do Kite)</option>
-            <option value="assist_kite">Assistência de Kite (Cabana do Kite)</option>
-            <option value="diaria">Diária / Serviço Geral (Cabana do Kite)</option>
-            <option value="aula_wing">Aula de Wing (Wing Academy)</option>
-            <option value="assist_wing">Assistência de Wing (Wing Academy)</option>
+            <option value="aula_kite">Aula de Kite</option>
+            <option value="assist_kite">Assistência de Kite</option>
+            <option value="diaria">Diária / Serviço Geral</option>
+            <option value="aula_wing">Aula de Wing</option>
+            <option value="assist_wing">Assistência de Wing</option>
           </select>
         </div>
 
@@ -463,6 +462,17 @@
               <option value="1">1h</option>
               <option value="1.5">1h:30</option>
               <option value="2" selected>2h</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ASSISTÊNCIA DE KITE -->
+        <div id="groupAssistKite" class="hidden">
+          <div class="form-group">
+            <label for="localAssistKite">Local</label>
+            <select id="localAssistKite">
+              <option value="ponta">Ponta</option>
+              <option value="patos">Patos (+ R$ 50,00)</option>
             </select>
           </div>
         </div>
@@ -538,6 +548,7 @@
       document.getElementById('ganhosForm').reset();
       document.getElementById('data').valueAsDate = new Date();
       document.getElementById('groupAulaKite').classList.add('hidden');
+      document.getElementById('groupAssistKite').classList.add('hidden');
       document.getElementById('groupSubDiaria').classList.add('hidden');
       document.getElementById('groupHorasGeral').classList.add('hidden');
       document.getElementById('groupQtdAlunos').classList.add('hidden');
@@ -546,16 +557,21 @@
     function tratarMudancaTipo() {
       const tipo = document.getElementById('tipoServico').value;
       const groupAulaKite = document.getElementById('groupAulaKite');
+      const groupAssistKite = document.getElementById('groupAssistKite');
       const groupSubDiaria = document.getElementById('groupSubDiaria');
       const groupHorasGeral = document.getElementById('groupHorasGeral');
 
       groupAulaKite.classList.add('hidden');
+      groupAssistKite.classList.add('hidden');
       groupSubDiaria.classList.add('hidden');
       groupHorasGeral.classList.add('hidden');
 
       if (tipo === 'aula_kite') {
         groupAulaKite.classList.remove('hidden');
         tratarMudancaModalidade();
+      } else if (tipo === 'assist_kite') {
+        groupAssistKite.classList.remove('hidden');
+        groupHorasGeral.classList.remove('hidden');
       } else if (tipo === 'diaria') {
         groupSubDiaria.classList.remove('hidden');
       } else if (tipo !== '') {
@@ -612,6 +628,19 @@
 
         titulo = `Aula Kite (${aluno}) - ${rotuloModalidade} / ${rotuloLocal} / ${rotuloDuracao}`;
 
+      } else if (tipoServico === 'assist_kite') {
+        const horas = parseFloat(document.getElementById('quantidadeHoras').value) || 0;
+        const localAssist = document.getElementById('localAssistKite').value;
+        
+        let valorBase = horas * 50;
+        if (localAssist === 'patos') {
+          valorBase += 50;
+        }
+        
+        valor = valorBase;
+        const rotuloLocal = localAssist === 'ponta' ? 'Ponta' : 'Patos';
+        titulo = `Assistência de Kite (${horas}h) - ${rotuloLocal}`;
+
       } else if (tipoServico === 'diaria') {
         const subDiaria = document.getElementById('subDiaria').value;
         titulo = `Diária (${subDiaria})`;
@@ -626,9 +655,6 @@
         } else if (tipoServico === 'assist_wing') {
           titulo = `Assistência de Wing (${horas}h)`;
           valor = horas * 97.5;
-        } else if (tipoServico === 'assist_kite') {
-          titulo = `Assistência de Kite (${horas}h)`;
-          valor = horas * 50;
         }
       }
 
@@ -666,7 +692,6 @@
       const registrosFiltrados = registros.filter(item => {
         if (filtroAtual === 'todos') return true;
         
-        // Agrupamento por escola
         if (filtroAtual === 'escola_wing') {
           return item.tipo === 'aula_wing' || item.tipo === 'assist_wing';
         }
@@ -674,7 +699,6 @@
           return item.tipo === 'aula_kite' || item.tipo === 'assist_kite' || item.tipo === 'diaria';
         }
 
-        // Filtro específico
         return item.tipo === filtroAtual;
       });
 
