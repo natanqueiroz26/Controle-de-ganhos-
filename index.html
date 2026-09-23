@@ -197,8 +197,9 @@
       padding: 24px 16px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
       box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+      overflow-y: auto;
     }
 
     .sidebar.open {
@@ -214,29 +215,46 @@
     }
 
     .menu-group-title {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #94a3b8;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s;
+    }
+
+    .menu-group-title:hover {
+      background: #e2e8f0;
+    }
+
+    .menu-subitems {
+      margin-left: 8px;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .menu-item {
-      padding: 10px 12px;
+      padding: 8px 12px;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: #334155;
+      color: #475569;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       transition: background 0.2s;
     }
 
     .menu-item:hover, .menu-item.active {
-      background: #f1f5f9;
+      background: #e0f2fe;
       color: var(--primary-color);
     }
 
@@ -329,26 +347,36 @@
       </div>
     </div>
 
+    <!-- ICARAÍ WING ACADEMY -->
     <div>
-      <div class="menu-group-title">Icaraí Wing Academy</div>
-      <div class="menu-item" onclick="filtrar('aula_wing', 'Wing Academy - Aulas')">
-        🪂 Aulas de Wing
+      <div class="menu-group-title" onclick="filtrar('escola_wing', 'Icaraí Wing Academy (Tudo)')">
+        🪂 Icaraí Wing Academy <span>➔</span>
       </div>
-      <div class="menu-item" onclick="filtrar('assist_wing', 'Wing Academy - Assistências')">
-        🛠️ Assistências de Wing
+      <div class="menu-subitems">
+        <div class="menu-item" onclick="filtrar('aula_wing', 'Wing Academy - Aulas')">
+          └ Aulas de Wing
+        </div>
+        <div class="menu-item" onclick="filtrar('assist_wing', 'Wing Academy - Assistências')">
+          └ Assistências de Wing
+        </div>
       </div>
     </div>
 
+    <!-- CABANA DO KITE -->
     <div>
-      <div class="menu-group-title">Cabana do Kite</div>
-      <div class="menu-item" onclick="filtrar('aula_kite', 'Cabana do Kite - Aulas')">
-        🪁 Aulas de Kite
+      <div class="menu-group-title" onclick="filtrar('escola_kite', 'Cabana do Kite (Tudo)')">
+        🪁 Cabana do Kite <span>➔</span>
       </div>
-      <div class="menu-item" onclick="filtrar('assist_kite', 'Cabana do Kite - Assistências')">
-        🛠️ Assistências de Kite
-      </div>
-      <div class="menu-item" onclick="filtrar('diaria', 'Cabana do Kite - Serviço Geral')">
-        🏖️ Diárias / Serviço Geral
+      <div class="menu-subitems">
+        <div class="menu-item" onclick="filtrar('aula_kite', 'Cabana do Kite - Aulas')">
+          └ Aulas de Kite
+        </div>
+        <div class="menu-item" onclick="filtrar('assist_kite', 'Cabana do Kite - Assistências')">
+          └ Assistências de Kite
+        </div>
+        <div class="menu-item" onclick="filtrar('diaria', 'Cabana do Kite - Serviço Geral')">
+          └ Diárias / Serviço Geral
+        </div>
       </div>
     </div>
   </div>
@@ -392,11 +420,11 @@
           <label for="tipoServico">Tipo de Serviço</label>
           <select id="tipoServico" onchange="tratarMudancaTipo()" required>
             <option value="" disabled selected hidden>Selecione...</option>
-            <option value="aula_kite">Aula de Kite</option>
-            <option value="assist_kite">Assistência de Kite</option>
-            <option value="aula_wing">Aula de Wing</option>
-            <option value="assist_wing">Assistência de Wing</option>
-            <option value="diaria">Diária</option>
+            <option value="aula_kite">Aula de Kite (Cabana do Kite)</option>
+            <option value="assist_kite">Assistência de Kite (Cabana do Kite)</option>
+            <option value="diaria">Diária / Serviço Geral (Cabana do Kite)</option>
+            <option value="aula_wing">Aula de Wing (Wing Academy)</option>
+            <option value="assist_wing">Assistência de Wing (Wing Academy)</option>
           </select>
         </div>
 
@@ -492,7 +520,10 @@
       
       const items = document.querySelectorAll('.menu-item');
       items.forEach(el => el.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      
+      if (event && event.currentTarget && event.currentTarget.classList.contains('menu-item')) {
+        event.currentTarget.classList.add('active');
+      }
 
       fecharSidebar();
       renderizarHistorico();
@@ -634,6 +665,16 @@
 
       const registrosFiltrados = registros.filter(item => {
         if (filtroAtual === 'todos') return true;
+        
+        // Agrupamento por escola
+        if (filtroAtual === 'escola_wing') {
+          return item.tipo === 'aula_wing' || item.tipo === 'assist_wing';
+        }
+        if (filtroAtual === 'escola_kite') {
+          return item.tipo === 'aula_kite' || item.tipo === 'assist_kite' || item.tipo === 'diaria';
+        }
+
+        // Filtro específico
         return item.tipo === filtroAtual;
       });
 
