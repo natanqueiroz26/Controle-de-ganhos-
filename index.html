@@ -41,6 +41,30 @@
       max-width: 500px;
     }
 
+    /* TOP BAR / MENU HAMBÚRGUER */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .btn-menu {
+      background: none;
+      border: none;
+      font-size: 26px;
+      color: #0f172a;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-left: 12px;
+      color: #1e293b;
+    }
+
+    /* CARTOES E HISTÓRICO */
     .total-card {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
@@ -52,7 +76,7 @@
     }
 
     .total-card h2 {
-      font-size: 14px;
+      font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 1px;
       opacity: 0.9;
@@ -72,7 +96,7 @@
     }
 
     .history-header h3 {
-      font-size: 18px;
+      font-size: 16px;
       color: #334155;
     }
 
@@ -149,6 +173,74 @@
       cursor: pointer;
     }
 
+    /* MENU LATERAL (DRAWER) */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 2000;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transition: left 0.3s ease;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-header {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-color);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .menu-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .menu-item {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+    }
+
+    .menu-item:hover, .menu-item.active {
+      background: #f1f5f9;
+      color: var(--primary-color);
+    }
+
+    /* MODAL */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -226,25 +318,66 @@
 </head>
 <body>
 
+  <!-- OVERLAY E MENU LATERAL -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">Navegação</div>
+
+    <div>
+      <div class="menu-item active" onclick="filtrar('todos', 'Todos os Registros')">
+        📊 Todos os Registros
+      </div>
+    </div>
+
+    <div>
+      <div class="menu-group-title">Icaraí Wing Academy</div>
+      <div class="menu-item" onclick="filtrar('aula_wing', 'Wing Academy - Aulas')">
+        🪂 Aulas de Wing
+      </div>
+      <div class="menu-item" onclick="filtrar('assist_wing', 'Wing Academy - Assistências')">
+        🛠️ Assistências de Wing
+      </div>
+    </div>
+
+    <div>
+      <div class="menu-group-title">Cabana do Kite</div>
+      <div class="menu-item" onclick="filtrar('aula_kite', 'Cabana do Kite - Aulas')">
+        🪁 Aulas de Kite
+      </div>
+      <div class="menu-item" onclick="filtrar('assist_kite', 'Cabana do Kite - Assistências')">
+        🛠️ Assistências de Kite
+      </div>
+      <div class="menu-item" onclick="filtrar('diaria', 'Cabana do Kite - Serviço Geral')">
+        🏖️ Diárias / Serviço Geral
+      </div>
+    </div>
+  </div>
+
   <div class="app-container">
+    <div class="top-bar">
+      <button class="btn-menu" onclick="abrirSidebar()">&#9776;</button>
+      <div class="page-title" id="pageTitle">Todos os Registros</div>
+    </div>
+
     <div class="total-card">
-      <h2>Total de Ganhos</h2>
+      <h2 id="totalLabel">Total de Ganhos</h2>
       <div class="amount" id="totalAmount">R$ 0,00</div>
     </div>
 
     <div class="history-header">
-      <h3>Histórico de Registros</h3>
+      <h3 id="historyTitle">Histórico Completo</h3>
     </div>
 
     <div id="historyList" class="history-list"></div>
     
     <div id="emptyState" class="empty-state">
-      Nenhum registro adicionado ainda.<br>Clique no botão <b>+</b> abaixo para adicionar.
+      Nenhum registro adicionado para este filtro.<br>Clique no botão <b>+</b> para adicionar.
     </div>
   </div>
 
   <button class="btn-add-float" onclick="abrirModal()">+</button>
 
+  <!-- MODAL DE FORMULÁRIO -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
       <h3>Novo Registro</h3>
@@ -267,7 +400,7 @@
           </select>
         </div>
 
-        <!-- CAMPOS ESPECÍFICOS PARA AULA DE KITE -->
+        <!-- AULA DE KITE -->
         <div id="groupAulaKite" class="hidden">
           <div class="form-group">
             <label for="nomeAluno">Nome do(s) Aluno(s)</label>
@@ -306,7 +439,7 @@
           </div>
         </div>
 
-        <!-- SUB-OPÇÃO DA DIÁRIA -->
+        <!-- DIÁRIA -->
         <div class="form-group hidden" id="groupSubDiaria">
           <label for="subDiaria">Tipo de Diária</label>
           <select id="subDiaria">
@@ -315,7 +448,7 @@
           </select>
         </div>
 
-        <!-- HORAS (PARA OUTRAS AULAS E ASSISTÊNCIAS) -->
+        <!-- HORAS GERAIS -->
         <div class="form-group hidden" id="groupHorasGeral">
           <label for="quantidadeHoras">Quantidade de Horas</label>
           <input type="number" id="quantidadeHoras" min="0.5" step="0.5" placeholder="Ex: 1 ou 2">
@@ -335,11 +468,35 @@
     }
 
     let registros = JSON.parse(localStorage.getItem('registros_ganhos')) || [];
+    let filtroAtual = 'todos';
 
     window.onload = function() {
       document.getElementById('data').valueAsDate = new Date();
       renderizarHistorico();
     };
+
+    function abrirSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').style.display = 'block';
+    }
+
+    function fecharSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').style.display = 'none';
+    }
+
+    function filtrar(tipo, titulo) {
+      filtroAtual = tipo;
+      document.getElementById('pageTitle').innerText = titulo;
+      document.getElementById('historyTitle').innerText = titulo;
+      
+      const items = document.querySelectorAll('.menu-item');
+      items.forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      fecharSidebar();
+      renderizarHistorico();
+    }
 
     function abrirModal() {
       document.getElementById('modalOverlay').style.display = 'flex';
@@ -409,12 +566,11 @@
           numPessoas = parseInt(document.getElementById('qtdAlunos').value) || 1;
         }
 
-        // Valor por hora por pessoa (2h Particular = 162,50 -> 81,25/h | 2h Coletiva = 137,50 por pessoa -> 68,75/h/pessoa)
         const valorHoraPessoa = (modalidade === 'particular') ? 81.25 : 68.75;
         let valorBase = (valorHoraPessoa * duracao) * numPessoas;
         
         if (local === 'patos') {
-          valorBase += 75; // Adicional Patos
+          valorBase += 75;
         }
 
         valor = valorBase;
@@ -448,6 +604,7 @@
       const novoRegistro = {
         id: Date.now(),
         data: dataFormatada,
+        tipo: tipoServico,
         titulo: titulo,
         valor: valor
       };
@@ -475,12 +632,17 @@
       historyList.innerHTML = '';
       let total = 0;
 
-      if (registros.length === 0) {
+      const registrosFiltrados = registros.filter(item => {
+        if (filtroAtual === 'todos') return true;
+        return item.tipo === filtroAtual;
+      });
+
+      if (registrosFiltrados.length === 0) {
         emptyState.style.display = 'block';
       } else {
         emptyState.style.display = 'none';
 
-        registros.forEach(item => {
+        registrosFiltrados.forEach(item => {
           total += item.valor;
 
           const card = document.createElement('div');
